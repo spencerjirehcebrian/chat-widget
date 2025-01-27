@@ -23,6 +23,7 @@ const automatedResponses = [
     "Thanks for your message. Let me check that for you.",
     "I understand your concern. Could you provide more details?",
     "I'm here to help! What specific information do you need?",
+    " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel sollicitudin nulla. Integer finibus elit erat, nec egestas orci tempus eu. Mauris nec felis ornare, sodales sem eget, pretium lacus. Integer in justo auctor dui lacinia euismod tempus vel metus. Maecenas nec tristique quam. Sed aliquam nunc et mauris facilisis suscipit a ac ex. Nunc sed erat malesuada, finibus turpis sit amet, hendrerit metus. Maecenas interdum mattis turpis, vitae tempus arcu consequat vel. Proin lacus felis, accumsan quis sapien ut, sollicitudin fringilla turpis. Morbi elementum ullamcorper odio nec fermentum. Sed id magna ut lectus vestibulum suscipit eleifend sed eros. Nunc non tortor eget mauris tincidunt vulputate sed in nunc. Curabitur consectetur auctor mi, vitae scelerisque nisl accumsan non. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent ut ligula ipsum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut varius posuere dolor. Ut feugiat molestie lacinia. Curabitur ligula neque, rutrum id dapibus vel, dapibus et tellus. Sed vitae diam ac augue mollis tincidunt. Aenean at leo in ipsum dignissim eleifend quis ac libero. Curabitur non ante at risus feugiat laoreet. "
 ];
 
 function getRandomResponse() {
@@ -42,6 +43,7 @@ wss.on('connection', (ws) => {
         sender: 'bot'
     }));
 
+    const randomDelay = Math.floor(Math.random() * (7000 - 2000 + 1)) + 2000;
     ws.on('message', (message) => {
         try {
             const parsedMessage = JSON.parse(message);
@@ -61,7 +63,7 @@ wss.on('connection', (ws) => {
                     content: getRandomResponse(),
                     sender: 'bot'
                 }));
-            }, 1000);
+            }, randomDelay);
 
         } catch (error) {
             console.error('Error processing message:', error);

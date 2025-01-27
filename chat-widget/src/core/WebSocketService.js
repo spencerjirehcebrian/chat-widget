@@ -47,12 +47,17 @@ export default class WebSocketService {
 
   handleReconnect() {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
+      this.reconnectAttempts++;
+      this.emit('reconnect-attempt', this.reconnectAttempts, this.maxReconnectAttempts);
+      
       setTimeout(() => {
-        this.reconnectAttempts++;
         this.connect();
       }, this.reconnectDelay * this.reconnectAttempts);
     } else {
-      this.emit('error', new Error('Max reconnection attempts reached'));
+      // First, clear any existing retry messages
+      this.emit('clear-retry-message');
+      // Then emit the final connection error
+      this.emit('connection-failed', 'Unable to establish connection. Please try again later.');
     }
   }
 

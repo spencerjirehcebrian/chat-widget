@@ -40,34 +40,43 @@ export default class ChatManager {
     try {
       if (this.wsService.isConnected()) {
         this.wsService.send(message);
-        // this.uiManager.addMessage(message, 'user');
+        // Show typing indicator after user message
+        setTimeout(() => {
+          this.uiManager.showLoadingIndicator();
+        }, 500); // Small delay to make it feel more natural
       } else {
         this.messageQueue.push(message);
         this.wsService.connect();
+        this.uiManager.showError('Network error. Connecting to server...');
       }
     } catch (error) {
-      this.uiManager.showError('Failed to send message');
+      this.uiManager.showError('Unable to send message. Please try again.');
     }
   }
-
   initializeWebSocketHandlers() {
     this.wsService
       .on('open', () => {
-        this.uiManager.updateConnectionStatus('connected');
         this.processMessageQueue();
       })
       .on('close', () => {
-        this.uiManager.updateConnectionStatus('disconnected');
+        // No need to show initial disconnect message as retry will show immediately
+      })
+      .on('reconnect-attempt', (attempt, maxAttempts) => {
+        this.uiManager.handleConnectionRetry(attempt, maxAttempts);
       })
       .on('error', (error) => {
-        this.uiManager.showError(error.message);
+        console.error('WebSocket error:', error);
+      })
+      .on('connection-failed', (message) => {
+        this.uiManager.showError(message);
       })
       .on('message', (message) => {
         if (message.content) {
           this.uiManager.addMessage(message.content, message.sender || 'bot');
         }
       });
-  }
+    }
+  
 
   processMessageQueue() {
     while (this.messageQueue.length > 0) {
