@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat Widget Example</title>
+  </head>
+  <body>
+    <h1>My Website</h1>
+
+    <script src="dist/chat-widget.min.js"></script>
+    <script>
+      window.onload = function () {
+        ChatWidget.init({
+          serverUrl: "ws://localhost:3000",
+          title: "Customer Support",
+        });
+      };
+    </script>
+  </body>
+</html>
