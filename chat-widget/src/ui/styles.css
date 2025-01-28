@@ -35,11 +35,37 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  transform-origin: center;
 }
 
 .chat-widget-toggle:hover {
   transform: scale(1.05) rotate(5deg);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+}
+
+.chat-widget-toggle:active {
+  transform: scale(0.9);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animation for the icon when chat is opened */
+.chat-widget-toggle.opened .chat-widget-icon {
+  transform: rotate(180deg) scale(0.9);
+}
+
+/* Animation for the button shadow on click */
+.chat-widget-toggle:active {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Smooth transition back to normal state */
+.chat-widget-toggle {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ensure icon transitions smoothly */
+.chat-widget-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .chat-widget-icon {
@@ -140,7 +166,7 @@
 @media screen and (min-width: 1200px) {
   .chat-widget-box {
     width: 500px;
-    height: 650px;
+    height: 800px;
   }
 }
 
@@ -154,7 +180,30 @@
   padding: 1.75rem 1.25rem;
   background: var(--primary-color);
   color: var(--text-color);
-  border-radius: 20px 20px 0 0;
+}
+
+.chat-header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-header-avatar {
+  width: 45px;
+  height: 45px;
+  border: #F1F1F3 2px solid;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-header-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .chat-widget-header h2 {
@@ -420,33 +469,70 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-speed) ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
+  position: relative;
+  overflow: hidden;
 }
 
 .chat-widget-form button:hover {
   background: var(--bot-message-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
+.chat-widget-form button:active {
+  transform: scale(0.85) rotate(-4deg);
+  background: var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-widget-form button:active .chat-widget-send-icon {
+  transform: scale(0.9) rotate(8deg);
+  filter: brightness(0) invert(1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .chat-widget-send-icon {
   width: 20px;
   height: 20px;
-  transition: transform var(--transition-speed) ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* In src/ui/styles.css, add these styles: */
+.chat-widget-form button::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0;
+  transform: scale(2);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.chat-widget-form button:active::after {
+  opacity: 1;
+  transform: scale(0);
+  transition: 0s;
+}
+
+/* Disabled state */
 .chat-widget-form button:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
 }
 
 .chat-widget-form button:disabled:hover {
-    background: var(--bg-color);
+  background: var(--bg-color);
+  transform: none;
+  box-shadow: none;
 }
 
 .chat-widget-form button:disabled .chat-widget-send-icon {
-    opacity: 0.5;
+  opacity: 0.5;
+  transform: none;
 }
 
 /* .chat-widget-form button:hover .chat-widget-send-icon {

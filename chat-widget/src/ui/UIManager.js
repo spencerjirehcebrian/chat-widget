@@ -43,7 +43,12 @@ export default class UIManager {
     this.chatBox.className = 'chat-widget-box';
     this.chatBox.innerHTML = `
       <header class="chat-widget-header">
-        <h2>${this.config.title}</h2>
+        <div class="chat-header-content">
+          <div class="chat-header-avatar">
+            <img src="${this.config.botAvatarUrl}" alt="Bot Avatar">
+          </div>
+          <h2>${this.config.title}</h2>
+        </div>
       </header>
       <div class="chat-widget-messages"></div>
       <form class="chat-widget-form">
